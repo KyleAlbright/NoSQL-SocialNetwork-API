@@ -67,7 +67,7 @@ const userController = {
   addFriend(req, res) {
     User.findOneAndUpdate(
       {
-        __id: req.params.id,
+        _id: req.params.id,
       },
       {
         $addToSet: {
@@ -79,11 +79,13 @@ const userController = {
         runValidators: true,
       }
     )
-      .then((user) =>
-        !user
-          ? res.status(404).json({ message: "User not found." })
-          : res.json(user)
-      )
+      .then((user) => {
+        if (!user) {
+          res.status(404).json({ message: "User not found." });
+          return;
+        }
+        res.json(user);
+      })
       .catch((err) => res.status(500).json(err));
   },
 
