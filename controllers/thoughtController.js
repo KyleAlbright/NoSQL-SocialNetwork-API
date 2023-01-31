@@ -59,19 +59,19 @@ const thoughtController = {
   // to delete a thought
   deleteThought(req, res) {
     Thought.findOneAndDelete({ _id: req.params.id })
-      .then((thought) => 
-        !thought ? res.status(404).json({ message: "Thought not found." })
-         :User.findOneAndUpdate(
-          
+      .then((thought) => {
+        if (!thought) {
+          res.status(404).json({ message: "Thought not found." });
+          return;
+        }
+           res.json(thought)
+         User.findOneAndUpdate(
           { _id: req.body.userId },
-          { $pull: { thoughts: thought._id } },
+          { $pull: { thoughts:thought._id } },
           { new: true }
-        ))
-      
-      .then((user) => {
-        !user ? res.status(404).json({ message: "Thought not found." })
-      : res.json({ message: "Thought deleted" })
-  })
+        );
+      })
+      .then(() => res.json({ message: "Thought deleted" }))
       .catch((err) => res.status(500).json(err));
   },
 
