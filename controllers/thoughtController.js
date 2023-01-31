@@ -3,6 +3,7 @@ const { Thought, User } = require("../models");
 const thoughtController = {
   // to get all thoughts
   getAllThoughts(req, res) {
+    console.log("got here")
     Thought.find()
       .then((thoughts) => res.json(thoughts))
       .catch((err) => res.status(500).json(err));
@@ -10,7 +11,8 @@ const thoughtController = {
 
   // to get a single thought
   getSingleThought(req, res) {
-    Thought.findOne({ _id: params.id })
+ 
+    Thought.findOne({ _id: req.params.id }).populate({path: "username"})
       .then((thought) =>
         !thought
           ? res.status(404).json({ message: "Thought not found." })
@@ -71,5 +73,36 @@ const thoughtController = {
       .then(() => res.json({ message: "Thought deleted" }))
       .catch((err) => res.status(500).json(err));
   },
-  
+
+  addReaction(req, res) {
+    Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $addToSet: { reactions: req.body } },
+      { new: true, runValidators: true }
+    )
+
+      .then((thought) =>
+        !thought
+          ? res.status(404).json({ message: "User not found." })
+          : res.json(thought)
+      )
+      .catch((err) => res.status(500).json(err));
+  },
+
+  deleteReaction(req, res) {
+    Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId }, 
+      { $pull: { reactions: {reactionId: req.params.reactionId}}},
+      { new: true, runValidators: true}
+    )
+    .then((thought) =>
+        !thought
+          ? res.status(404).json({ message: "User not found." })
+          : res.json(thought)
+      )
+      .catch((err) => res.status(500).json(err));
+  },
+
 };
+
+module.exports = thoughtController
