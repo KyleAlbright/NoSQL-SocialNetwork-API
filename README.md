@@ -29,6 +29,11 @@ To get started, please run "npm i" in the terminal to download all the dependenc
 ### [Usage](#table-of-contents)
 After installing the dependencies and insomnia we can run this application. Start by opening the terminal, and type "npm run watch" to start this application. Please follow the walkthough video to see the crud operations in action.
 
+![Screenshot (74)](https://user-images.githubusercontent.com/110487869/215921617-3bf787b6-9c11-4abf-b292-f34d88e06190.png)
+
+![Screenshot (76)](https://user-images.githubusercontent.com/110487869/215921628-9918b156-d9c3-4310-82a0-4b407930c8e2.png)
+
+![Screenshot (77)](https://user-images.githubusercontent.com/110487869/215921644-d0032431-18f2-4662-b604-0ec90dfdffe2.png)
 
 
 ### [Contributing](#table-of-contents)
