@@ -3,7 +3,6 @@ const { Thought, User } = require("../models");
 const thoughtController = {
   // to get all thoughts
   getAllThoughts(req, res) {
-    console.log("got here")
     Thought.find()
       .then((thoughts) => res.json(thoughts))
       .catch((err) => res.status(500).json(err));
@@ -56,25 +55,28 @@ const thoughtController = {
       .catch((err) => res.status(500).json(err));
   },
 
-  // to delete a thought
+  // to delete a thought 
   deleteThought(req, res) {
-    Thought.findOneAndDelete({ _id: req.params.id })
+    Thought.findOneAndRemove({ _id: req.params.id })
       .then((thought) => {
         if (!thought) {
-          res.status(404).json({ message: "Thought not found." });
-          return;
+          return res.status(404).json({ message: "Thought not found." });
+          
         }
-           res.json(thought)
-         User.findOneAndUpdate(
-          { _id: req.body.userId },
-          { $pull: { thoughts:thought._id } },
-          { new: true }
-        );
+          
+         return User.findOneAndUpdate(
+          { thoughts: req.params.id },
+          { $pull: { thoughts: req.params.id } },
+          { new: true, runValidators: true }
+        ); 
       })
-      .then(() => res.json({ message: "Thought deleted" }))
+      .then((userData) => { 
+        if (!userData) {
+          return res.status(404).json({ message: "no user" }) }
+          res.json({ message: "Thought deleted" })})
       .catch((err) => res.status(500).json(err));
   },
-
+ // to add a reaction
   addReaction(req, res) {
     Thought.findOneAndUpdate(
       { _id: req.params.thoughtId },
@@ -89,7 +91,7 @@ const thoughtController = {
       )
       .catch((err) => res.status(500).json(err));
   },
-
+// to delete a reaction
   deleteReaction(req, res) {
     Thought.findOneAndUpdate(
       { _id: req.params.thoughtId }, 

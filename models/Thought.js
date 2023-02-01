@@ -24,6 +24,7 @@ const reactionSchema = new Schema(
     createdAt: {
       type: Date,
       default: Date.now,
+      // // this is our date formatter. Chose to do this than a util file as it seemed easier
       get: dateTime => moment(dateTime).format('MMM DD, YYYY [at] hh:mm a')
     },
   },
@@ -46,6 +47,7 @@ const thoughtSchema = new Schema(
     createdAt: {
       type: Date,
       default: Date.now,
+      // this is our date formatter. Chose to do this than a util file as it seemed easier
       get:  dateTime => moment(dateTime).format('MMM DD, YYYY [at] hh:mm a'),
       required: true
     },
